@@ -30,10 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import com.example.madcamp_week2.R
 import com.example.madcamp_week2.remote.apiService
@@ -43,6 +45,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.api.services.youtube.YouTube
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,6 +55,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import java.util.concurrent.Executors
 
 @Composable
 fun LoginView(navHostController: NavHostController){
@@ -79,63 +84,69 @@ fun LoginView(navHostController: NavHostController){
         }
     }
 
-    Column(
-        modifier = Modifier.padding(bottom = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+    Box() {
 
-        Spacer(Modifier.weight(1f))
+        YouTubeShortsBackground()
 
-        Text("ASSA에 오신 것을", color = Color.White)
-        Text("환영합니다", color = Color.White)
-        Text("로그인하여 최신 트렌드를 확인하세요", color = Color.White)
-        Text("친구들과 트렌드 성적으로 경쟁해 보세요", color = Color.White)
 
         Column(
-            modifier = Modifier.padding(32.dp),
+            modifier = Modifier.padding(bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFD13739)
-                ),
-                onClick = {
-                    navHostController.navigate(Screen.OtherScreens.Main.oRoute)
-                }
-            ) {
-                Text("로그인")
-            }
+            Spacer(Modifier.weight(1f))
 
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+            Text("ASSA에 오신 것을", color = Color.White)
+            Text("환영합니다", color = Color.White)
+            Text("로그인하여 최신 트렌드를 확인하세요", color = Color.White)
+            Text("친구들과 트렌드 성적으로 경쟁해 보세요", color = Color.White)
+
+            Column(
+                modifier = Modifier.padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Button(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
-                    contentPadding = PaddingValues(0.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White
+                        containerColor = Color(0xFFD13739)
                     ),
                     onClick = {
-
-                        val signInIntent = googleSignInClient.signInIntent
-                        launcher.launch(signInIntent)
-
+                        navHostController.navigate(Screen.OtherScreens.Main.oRoute)
                     }
-                )
-                {
-                    Icon(
-                        painter = painterResource(id = R.drawable.google_icon),
-                        contentDescription = "Google Icon", // 아이콘 색상 (필요에 따라 변경 가능
-                        tint = Color.Unspecified,
-                        modifier = Modifier.size(24.dp)
-                    )
+                ) {
+                    Text("로그인")
                 }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp),
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White
+                        ),
+                        onClick = {
+
+                            val signInIntent = googleSignInClient.signInIntent
+                            launcher.launch(signInIntent)
+
+                        }
+                    )
+                    {
+                        Icon(
+                            painter = painterResource(id = R.drawable.google_icon),
+                            contentDescription = "Google Icon", // 아이콘 색상 (필요에 따라 변경 가능
+                            tint = Color.Unspecified,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
 //
 //                Button(
 //                    modifier = Modifier
@@ -199,8 +210,9 @@ fun LoginView(navHostController: NavHostController){
 //                        modifier = Modifier.size(24.dp)
 //                    )
 //                }
-            }
+                }
 
+            }
         }
     }
 }
@@ -224,6 +236,11 @@ fun sendTokenToBackend(idToken: String, navHostController: NavHostController) {
             Log.e("GoogleSignIn", "Network error", t)
         }
     })
+}
+
+@Composable
+fun YouTubeShortsBackground() {
+
 }
 
 

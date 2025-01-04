@@ -8,7 +8,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 val retrofit: Retrofit = Retrofit.Builder()
-    .baseUrl("http://192.168.64.26:8000/")
+    .baseUrl("http://172.10.7.19:8000/")
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
