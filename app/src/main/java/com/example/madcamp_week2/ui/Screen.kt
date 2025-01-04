@@ -20,6 +20,7 @@ sealed class Screen(val title: String, val route: String) {
         object Register: OtherScreens("Register", "register")
         object Detail: OtherScreens("Detail", "detail")
         object Main: OtherScreens("Main", "main")
+        object Play: OtherScreens("Play", "play")
     }
 
 

@@ -114,7 +114,11 @@ fun Navigation(
         }
 
         composable(Screen.BottomScreen.Profile.bRoute) {
-            ProfileView()
+            ProfileView(navController)
+        }
+
+        composable(Screen.OtherScreens.Play.oRoute) {
+            PlayView()
         }
     }
 
