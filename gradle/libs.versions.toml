@@ -14,6 +14,12 @@ material = "1.8.0-alpha07"
 playServicesAuth = "21.3.0"
 retrofit = "2.11.0"
 converterGson = "2.11.0"
+coilCompose = "2.7.0"
+materialIconsCore = "1.7.6"
+materialIconsExtended = "1.7.6"
+googleApiClientAndroid = "2.7.1"
+googleApiServicesYoutube = "v3-rev20241203-2.0.0"
+chromecastSender = "0.30"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,6 +42,12 @@ androidx-material = { group = "androidx.compose.material", name = "material", ve
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
+androidx-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "materialIconsCore" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
+google-api-client-android = { group = "com.google.api-client", name = "google-api-client-android", version.ref = "googleApiClientAndroid" }
+google-api-services-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version.ref = "googleApiServicesYoutube" }
+chromecast-sender = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "chromecast-sender", version.ref = "chromecastSender" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
