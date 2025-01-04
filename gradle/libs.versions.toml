@@ -19,6 +19,7 @@ materialIconsCore = "1.7.6"
 materialIconsExtended = "1.7.6"
 googleApiClientAndroid = "2.7.1"
 googleApiServicesYoutube = "v3-rev20241203-2.0.0"
+chromecastSender = "0.30"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +47,7 @@ androidx-material-icons-core = { group = "androidx.compose.material", name = "ma
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 google-api-client-android = { group = "com.google.api-client", name = "google-api-client-android", version.ref = "googleApiClientAndroid" }
 google-api-services-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version.ref = "googleApiServicesYoutube" }
+chromecast-sender = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "chromecast-sender", version.ref = "chromecastSender" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
