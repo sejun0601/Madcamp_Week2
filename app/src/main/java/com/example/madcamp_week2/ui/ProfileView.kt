@@ -37,10 +37,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.madcamp_week2.R
 
 @Composable
-fun ProfileView() {
+fun ProfileView(navHostController: NavHostController) {
 
     Column {
         ProfileTab()
@@ -49,7 +50,7 @@ fun ProfileView() {
             modifier = Modifier.padding(8.dp)
         )
 
-        RankTab()
+        RankTab(navHostController)
 
         HorizontalDivider(
             modifier = Modifier.padding(8.dp)
@@ -124,7 +125,7 @@ fun ProfileTab(){
 }
 
 @Composable
-fun RankTab(){
+fun RankTab(navHostController: NavHostController){
     Column (
         modifier = Modifier.padding(8.dp)
     ) {
@@ -185,7 +186,9 @@ fun RankTab(){
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFD13739)
             ),
-            onClick = {},
+            onClick = {
+                navHostController.navigate(Screen.OtherScreens.Play.oRoute)
+            },
         ) {
 
             Text(
@@ -237,9 +240,3 @@ fun FavoriteTab(){
 
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun ProfilePreView(){
-    ProfileView()
-}

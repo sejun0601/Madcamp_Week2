@@ -1,7 +1,13 @@
 package com.example.madcamp_week2.ui
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import android.media.Image
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebView
+import android.widget.FrameLayout
 import android.widget.VideoView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,11 +26,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +40,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.madcamp_week2.R
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 data class VideoData(
     val videoId: String,
@@ -44,132 +57,106 @@ data class VideoData(
 
 @Composable
 fun HomeView(videoData: VideoData){
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        // 상단 youtube 로고
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(19.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.youtube_icon),
-                contentDescription = "youtube Icon",
-                modifier = Modifier.size(24.dp),
-                tint = Color.White
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Icon(
-                painter = painterResource(id = R.drawable.shorts_typo),
-                contentDescription = "shorts typo",
-                modifier = Modifier.size(45.dp),
-                tint = Color.White
-            )
-        }
-
-        // 중앙 비디오 영역
-        VideoBox(videoId = videoData.videoId, numComment = videoData.numComment)
-
-        // 채널 정보
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(19.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = videoData.channelImage),
-                contentDescription = "Channel Image",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(50))
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = "@${videoData.channelId}",
-                fontSize = 16.sp,
-                color = Color.White
-            )
-        }
-
-        Text(
-            text = videoData.videoTitle,
-            fontSize = 18.sp,
-            color = Color.White,
-            modifier = Modifier.padding(start = 28.dp),
-        )
-
+        ShortsPlayer("TOdd_wdKfgM")
     }
 }
+
+
 @Composable
-fun VideoBox(videoId: String, numComment: Int) {
-    Box(
+fun OverlayButtons() {
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(600.dp)
-            .background(Color.Black),
-        contentAlignment = Alignment.Center
+            .padding(top = 320.dp, end = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AndroidView(
-            factory = { context ->
-                WebView(context).apply {
-                    settings.javaScriptEnabled = true
-                    loadUrl("https://www.youtube.com/shorts/$videoId") // YouTube 링크 로드
-                }
-            },
-            modifier = Modifier.fillMaxSize()
+        Icon(
+            painter = painterResource(id = R.drawable.heart_icon),
+            contentDescription = "Like Icon",
+            modifier = Modifier.size(24.dp),
+            tint = Color.White
         )
-
-        // 오른쪽 아이콘
-        Column(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 320.dp, end = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.heart_icon),
-                contentDescription = "Like Icon",
-                modifier = Modifier.size(24.dp),
-                tint = Color.White
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.comment_icon),
-                contentDescription = "Comment Icon",
-                modifier = Modifier.size(24.dp),
-                tint = Color.White
-            )
-            Text(
-                text = numComment.toString(),
-                fontSize = 10.sp,
-                color = Color.White,
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.share_icon),
-                contentDescription = "Share Icon",
-                modifier = Modifier.size(24.dp),
-                tint = Color.White
-            )
-        }
+        Icon(
+            painter = painterResource(id = R.drawable.comment_icon),
+            contentDescription = "Comment Icon",
+            modifier = Modifier.size(24.dp),
+            tint = Color.White
+        )
+        Text(
+            text = "4",
+            fontSize = 10.sp,
+            color = Color.White,
+        )
+        Icon(
+            painter = painterResource(id = R.drawable.share_icon),
+            contentDescription = "Share Icon",
+            modifier = Modifier.size(24.dp),
+            tint = Color.White
+        )
     }
 }
 
-@Preview
+
+@SuppressLint("ClickableViewAccessibility")
 @Composable
-fun HomePreView(){
-    HomeView(
-        videoData = VideoData(
-            videoId = "https://www.youtube.com/embed/sample_video",
-            channelImage = R.drawable.facebook_logo,
-            channelId = "NetflixKorea",
-            videoTitle = "게임을 멈추려는 자, 성기훈 | 오징어 게임 시즌2",
-            numComment = 300,
-        )
+fun ShortsPlayer(videoId: String) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    // (선택) 현재 Activity의 기존 orientation 상태 저장
+    val activity = context as? Activity
+    val previousOrientation = activity?.requestedOrientation
+
+    // 화면이 이 컴포저블로 이동했을 때 -> 세로 고정
+    // 컴포저블에서 벗어날 때 -> 원래 상태로 복귀
+    DisposableEffect(Unit) {
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+
+        onDispose {
+            // 복귀 시 원래 orientation 복원
+            activity?.requestedOrientation = previousOrientation ?: ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
+
+    // 뷰를 꽉 채우기 위해 fillMaxSize
+    AndroidView(
+        modifier = Modifier.fillMaxSize(),
+        factory = { localContext ->
+            val youTubePlayerView = YouTubePlayerView(localContext).apply {
+                // 자동 초기화 꺼두고, lifecycle 수동 연결하기
+                enableAutomaticInitialization = false
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            }
+
+            // Lifecycle 연동
+            lifecycleOwner.lifecycle.addObserver(youTubePlayerView)
+
+            // Player 리스너 등록
+            youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    // 기본 UI를 감추기 위해 setCustomPlayerUi 호출
+                    youTubePlayerView.setCustomPlayerUi(View(context)) // 빈 View로 대체
+
+                    // Shorts videoId 로드
+                    youTubePlayer.loadVideo(videoId, 0f)
+                }
+            })
+
+            // 유저 입력 막기: 모든 터치 이벤트를 소비해서 조작 불가능하게
+            youTubePlayerView.setOnTouchListener { _, _ -> true }
+
+            youTubePlayerView
+        },
+        update = {
+            // 필요 시 update 로직
+        }
     )
 }
-
