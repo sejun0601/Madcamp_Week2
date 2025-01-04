@@ -10,6 +10,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,10 +41,18 @@ fun MainView(){
     val currentRoute = navBackStackEntry?.destination?.route
 
     val viewModel :MainViewModel = viewModel()
+    val videoData by viewModel.videoData
+
+    // Load mock data for test
+    LaunchedEffect(Unit) {
+        viewModel.loadVideoData("59ek8wuhpgk") // Mock YouTube video ID
+    }
+    videoData?.let { data ->
+        HomeView(videoData = data) // videoData의 값을 HomeView에 전달
+    }
 
     val currentScreen = remember { viewModel.currentScreen.value}
     val title = remember { mutableStateOf(currentScreen.title) }
-
 
     val bottomBar: @Composable () -> Unit = {
         NavigationBar(
@@ -79,19 +88,25 @@ fun MainView(){
     Scaffold(
         bottomBar = {bottomBar()}
     ) { innerPadding ->
-        Navigation(navController, viewModel, innerPadding)
+        Navigation(navController, viewModel, innerPadding, videoData)
     }
 
 }
 
 @Composable
-fun Navigation(navController: NavController,viewModel: MainViewModel, innerPadding: PaddingValues){
+fun Navigation(
+    navController: NavController,
+    viewModel: MainViewModel,
+    innerPadding: PaddingValues,
+    videoData: VideoData?){
     NavHost(
         navController = navController as NavHostController,
         startDestination = Screen.BottomScreen.Home.bRoute,
         modifier = Modifier.padding(innerPadding)) {
         composable(Screen.BottomScreen.Home.bRoute) {
-            HomeView()
+            videoData?.let { data ->
+                HomeView(videoData = data)
+            }
         }
 
         composable(Screen.BottomScreen.Search.bRoute) {
