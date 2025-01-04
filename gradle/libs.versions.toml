@@ -14,6 +14,7 @@ material = "1.8.0-alpha07"
 playServicesAuth = "21.3.0"
 retrofit = "2.11.0"
 converterGson = "2.11.0"
+youtube-player = "1.2.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,6 +37,7 @@ androidx-material = { group = "androidx.compose.material", name = "material", ve
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
+youtube-player = { module = "com.google.android.youtube:player", version.ref = "youtube-player" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

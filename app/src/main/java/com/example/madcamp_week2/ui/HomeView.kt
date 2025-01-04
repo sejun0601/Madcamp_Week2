@@ -1,6 +1,7 @@
 package com.example.madcamp_week2.ui
 
 import android.media.Image
+import android.webkit.WebView
 import android.widget.VideoView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,9 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.madcamp_week2.R
+import com.google.android.youtube.player.YouTubePlayerView
+import com.google.android.youtube.player.YouTubePlayer
 
 data class VideoData(
-    val videoPath: String,
+    val videoId: String,
     val channelImage: Int,
     val channelId: String,
     val videoTitle: String,
@@ -71,7 +74,7 @@ fun HomeView(videoData: VideoData){
         }
 
         // 중앙 비디오 영역
-        VideoBox(videoPath = videoData.videoPath, numComment = videoData.numComment)
+        VideoBox(videoId = videoData.videoId, numComment = videoData.numComment)
 
         // 채널 정보
         Row(
@@ -105,7 +108,7 @@ fun HomeView(videoData: VideoData){
     }
 }
 @Composable
-fun VideoBox(videoPath: String, numComment: Int) {
+fun VideoBox(videoId: String, numComment: Int) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -115,9 +118,10 @@ fun VideoBox(videoPath: String, numComment: Int) {
     ) {
         AndroidView(
             factory = { context ->
-                VideoView(context).apply {
-                    setVideoPath(videoPath)
-                    start()
+                YouTubePlayerView(context).apply {
+                    initialize("YOUR_API_KEY") { player ->
+                        player.loadVideo(videoId) // YouTube Video ID로 로드
+                    }
                 }
             },
             modifier = Modifier.fillMaxSize()
@@ -126,9 +130,10 @@ fun VideoBox(videoPath: String, numComment: Int) {
         // 오른쪽 아이콘
         Column(
             modifier = Modifier
-                .align(Alignment.TopEnd) // 박스의 오른쪽 위 정렬
-                .padding(top = 320.dp, end = 16.dp), // 여백 설정
-            verticalArrangement = Arrangement.spacedBy(16.dp) // 아이콘 간 간격
+                .align(Alignment.TopEnd)
+                .padding(top = 320.dp, end = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.heart_icon),
@@ -162,7 +167,7 @@ fun VideoBox(videoPath: String, numComment: Int) {
 fun HomePreView(){
     HomeView(
         videoData = VideoData(
-            videoPath = "https://www.youtube.com/embed/sample_video",
+            videoId = "https://www.youtube.com/embed/sample_video",
             channelImage = R.drawable.facebook_logo,
             channelId = "NetflixKorea",
             videoTitle = "게임을 멈추려는 자, 성기훈 | 오징어 게임 시즌2",

@@ -24,7 +24,7 @@ class MainViewModel : ViewModel(){
     fun loadVideoData(videoId: String) {
         // Mock data based on the videoId
         val mockData = VideoData(
-            videoPath = "https://www.youtube.com/shorts/$videoId", // Example video path
+            videoId = videoId, // Example video path
             channelImage = R.drawable.facebook_logo, // Replace with an actual drawable resource
             channelId = "NetflixKorea", // Example channel ID
             videoTitle = "오징어 게임 시즌2", // Example video title
