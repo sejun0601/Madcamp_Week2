@@ -33,8 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.madcamp_week2.R
-import com.google.android.youtube.player.YouTubePlayerView
-import com.google.android.youtube.player.YouTubePlayer
 
 data class VideoData(
     val videoId: String,
@@ -118,10 +116,9 @@ fun VideoBox(videoId: String, numComment: Int) {
     ) {
         AndroidView(
             factory = { context ->
-                YouTubePlayerView(context).apply {
-                    initialize("YOUR_API_KEY") { player ->
-                        player.loadVideo(videoId) // YouTube Video ID로 로드
-                    }
+                WebView(context).apply {
+                    settings.javaScriptEnabled = true
+                    loadUrl("https://www.youtube.com/shorts/$videoId") // YouTube 링크 로드
                 }
             },
             modifier = Modifier.fillMaxSize()
