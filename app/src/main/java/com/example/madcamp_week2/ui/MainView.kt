@@ -30,7 +30,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.madcamp_week2.HomeViewModel
 import com.example.madcamp_week2.MainViewModel
+import com.example.madcamp_week2.SearchViewModel
 
 
 @Composable
@@ -41,15 +43,7 @@ fun MainView(){
     val currentRoute = navBackStackEntry?.destination?.route
 
     val viewModel :MainViewModel = viewModel()
-    val videoData by viewModel.videoData
-
-    // Load mock data for test
-    LaunchedEffect(Unit) {
-        viewModel.loadVideoData("59ek8wuhpgk") // Mock YouTube video ID
-    }
-    videoData?.let { data ->
-        HomeView(videoData = data) // videoData의 값을 HomeView에 전달
-    }
+    val videoData =  viewModel.videoState.value
 
     val currentScreen = remember { viewModel.currentScreen.value}
     val title = remember { mutableStateOf(currentScreen.title) }
@@ -57,7 +51,17 @@ fun MainView(){
     val bottomBar: @Composable () -> Unit = {
         NavigationBar(
             Modifier.wrapContentSize(),
-            containerColor = Color.White,
+            containerColor =if (currentRoute == Screen.BottomScreen.Home.bRoute) {
+                Color.Black
+            } else {
+                Color.White
+            },
+            contentColor = if (currentRoute == Screen.BottomScreen.Home.bRoute) {
+                Color.White
+            } else {
+                Color.Black
+            },
+            tonalElevation = 8.dp
         ){
             screensInBottomBar.forEach{
                     screen ->
@@ -77,7 +81,6 @@ fun MainView(){
                         )
                     },
                     label = {
-                        Text(text = screen.bTitle, fontSize = 10.sp)
                     }
                 )
             }
@@ -86,7 +89,8 @@ fun MainView(){
     }
 
     Scaffold(
-        bottomBar = {bottomBar()}
+        bottomBar = {bottomBar()},
+        containerColor = Color.White
     ) { innerPadding ->
         Navigation(navController, viewModel, innerPadding, videoData)
     }
@@ -98,19 +102,26 @@ fun Navigation(
     navController: NavController,
     viewModel: MainViewModel,
     innerPadding: PaddingValues,
-    videoData: VideoData?){
+    videoData: MainViewModel.VideoState?){
+
+    val homeViewModel : HomeViewModel = viewModel()
+    val searchViewModel: SearchViewModel = viewModel()
+
+
     NavHost(
         navController = navController as NavHostController,
         startDestination = Screen.BottomScreen.Home.bRoute,
         modifier = Modifier.padding(innerPadding)) {
         composable(Screen.BottomScreen.Home.bRoute) {
-            videoData?.let { data ->
-                HomeView(videoData = data)
+            videoData?.let {
+                HomeView(videoData =videoData, homeViewModel)
             }
         }
 
         composable(Screen.BottomScreen.Search.bRoute) {
-            SearchView()
+            videoData?.let {
+                SearchView(videoData, searchViewModel)
+            }
         }
 
         composable(Screen.BottomScreen.Profile.bRoute) {

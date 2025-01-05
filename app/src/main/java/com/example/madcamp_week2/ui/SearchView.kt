@@ -1,5 +1,6 @@
 package com.example.madcamp_week2.ui
 
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,20 +11,43 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.madcamp_week2.MainViewModel
 import com.example.madcamp_week2.R
+import com.example.madcamp_week2.SearchViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayInputStream
 
 @Composable
-fun SearchView() {
+fun SearchView(videoData: MainViewModel.VideoState, searchViewModel: SearchViewModel) {
+
+    val query = remember { mutableStateOf("") }
+
+    // Filter videos: exclude videos with political keywords and match query
+    val filteredVideos = remember(query.value) {
+        videoData.data.filter { video ->
+                    video.title.contains(query.value, ignoreCase = true)
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -31,32 +55,27 @@ fun SearchView() {
             .padding(8.dp)
     ) {
         Spacer(modifier = Modifier.height(24.dp))
-        SearchBar()
+        SearchBar(query)
         Spacer(modifier = Modifier.height(24.dp))
 
         YoutubeIcon()
         Spacer(modifier = Modifier.height(16.dp))
         LazyVerticalGrid(
-            columns = GridCells.Fixed(4),
+            columns = GridCells.Fixed(3),
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 1.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            items(40) {
-                Box(
-                    modifier = Modifier
-                        .aspectRatio(1f)
-                        .background(Color.LightGray)
-                )
+            items(filteredVideos.size) { index ->
+                ThumbnailImage(videoId = filteredVideos[index].video_id)
             }
         }
     }
 
 }
 @Composable
-fun SearchBar() {
-    val query = remember { mutableStateOf("") }
+fun SearchBar(query: androidx.compose.runtime.MutableState<String>) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,8 +119,22 @@ fun YoutubeIcon() {
     )
 }
 
-@Preview
 @Composable
-fun SearchPreView(){
-    SearchView()
+fun ThumbnailImage(videoId: String) {
+    val thumbnailUrl = "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
+    Box(
+        modifier = Modifier.fillMaxSize().aspectRatio(1f),
+        contentAlignment = Alignment.Center
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(thumbnailUrl)
+                .crossfade(true) // 페이드 애니메이션 적용
+                .build(),
+            contentDescription = "Thumbnail for video $videoId",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+    }
 }
+

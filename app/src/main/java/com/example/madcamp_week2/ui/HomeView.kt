@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -41,7 +43,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.example.madcamp_week2.HomeViewModel
+import com.example.madcamp_week2.MainViewModel
 import com.example.madcamp_week2.R
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.VerticalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
@@ -56,13 +63,26 @@ data class VideoData(
 )
 
 @Composable
-fun HomeView(videoData: VideoData){
+fun HomeView(videoData: MainViewModel.VideoState, homeViewModel: HomeViewModel){
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        ShortsPlayer("TOdd_wdKfgM")
+
+        if (videoData.loading) {
+            Text(text = "Loading...", fontSize = 20.sp) // 로딩 메시지 표시
+        } else if (videoData.error != null) {
+            Text(text = videoData.error, color = Color.Red) // 에러 메시지 표시
+        } else if (videoData.data.isEmpty()) {
+            Text(text = "No videos available.") // 데이터가 없을 때 처리
+        } else{
+
+            VideoPager(videoIds = videoData.data.map { it.video_id })
+
+        }
+
     }
 }
 
@@ -102,7 +122,7 @@ fun OverlayButtons() {
 }
 
 
-@SuppressLint("ClickableViewAccessibility")
+
 @Composable
 fun ShortsPlayer(videoId: String) {
     val context = LocalContext.current
@@ -125,7 +145,8 @@ fun ShortsPlayer(videoId: String) {
 
     // 뷰를 꽉 채우기 위해 fillMaxSize
     AndroidView(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxWidth(),
         factory = { localContext ->
             val youTubePlayerView = YouTubePlayerView(localContext).apply {
                 // 자동 초기화 꺼두고, lifecycle 수동 연결하기
@@ -150,13 +171,23 @@ fun ShortsPlayer(videoId: String) {
                 }
             })
 
-            // 유저 입력 막기: 모든 터치 이벤트를 소비해서 조작 불가능하게
-            youTubePlayerView.setOnTouchListener { _, _ -> true }
-
             youTubePlayerView
-        },
-        update = {
-            // 필요 시 update 로직
         }
     )
+}
+
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun VideoPager(videoIds: List<String>) {
+    val pagerState = rememberPagerState()
+
+    VerticalPager(
+        count = videoIds.size,
+        state = pagerState,
+        modifier = Modifier.fillMaxSize()
+    ) { page ->
+        // 현재 페이지에 해당하는 동영상을 표시
+        ShortsPlayer(videoId = videoIds[page])
+    }
 }

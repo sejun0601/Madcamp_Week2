@@ -20,6 +20,8 @@ materialIconsExtended = "1.7.6"
 googleApiClientAndroid = "2.7.1"
 googleApiServicesYoutube = "v3-rev20241203-2.0.0"
 chromecastSender = "0.30"
+accompanistPager = "0.36.0"
+accompanistPagerIndicators = "0.36.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,6 +50,8 @@ androidx-material-icons-extended = { group = "androidx.compose.material", name =
 google-api-client-android = { group = "com.google.api-client", name = "google-api-client-android", version.ref = "googleApiClientAndroid" }
 google-api-services-youtube = { group = "com.google.apis", name = "google-api-services-youtube", version.ref = "googleApiServicesYoutube" }
 chromecast-sender = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "chromecast-sender", version.ref = "chromecastSender" }
+accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanistPager" }
+accompanist-pager-indicators = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanistPagerIndicators" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
