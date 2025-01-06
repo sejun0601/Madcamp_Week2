@@ -3,9 +3,11 @@ package com.example.madcamp_week2.remote
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -25,5 +27,16 @@ interface ApiService {
     suspend fun getTrendingVideos(
         @Query("limit") limit: Int
     ): List<Video>
+
+    // CSRF 토큰 요청
+    @GET("api/v1/auth/csrf/")
+    suspend fun getCSRFToken(): CSRFResponse
+
+    // 로그인 요청
+    @POST("api/v1/auth/login/")
+    suspend fun login(
+        @Header("X-CSRFToken") csrfToken: String,
+        @Body loginRequest: LoginRequest
+    ): LoginResponse
 
 }

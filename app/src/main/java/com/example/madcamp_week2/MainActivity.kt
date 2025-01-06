@@ -12,9 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.madcamp_week2.ui.ASSALoginView
 import com.example.madcamp_week2.ui.LoginView
 import com.example.madcamp_week2.ui.MainView
 import com.example.madcamp_week2.ui.Screen
@@ -38,10 +40,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App(){
     val navController = rememberNavController()
+    val assaLoginViewModel:ASSALoginViewModel = viewModel()
 
     NavHost(navController, startDestination = Screen.OtherScreens.Login.oRoute) {
         composable(Screen.OtherScreens.Login.oRoute) { LoginView(navController) }
         composable(Screen.OtherScreens.Main.oRoute) { MainView() }
         composable(Screen.OtherScreens.Play.oRoute) { PlayView() }
+        composable(Screen.OtherScreens.ASSALogin.oRoute) { ASSALoginView(assaLoginViewModel, navController) }
     }
 }

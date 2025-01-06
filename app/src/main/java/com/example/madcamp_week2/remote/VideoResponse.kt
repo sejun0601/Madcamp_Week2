@@ -12,3 +12,16 @@ data class Video(
 
 
 data class VideoResponse(val data: List<Video> = emptyList(), )
+
+data class CSRFResponse(
+    val csrfToken: String
+)
+
+data class LoginRequest(
+    val username: String,
+    val password: String
+)
+
+data class LoginResponse(
+    val detail: String
+)

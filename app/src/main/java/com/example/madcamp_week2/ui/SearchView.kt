@@ -3,6 +3,7 @@ package com.example.madcamp_week2.ui
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.madcamp_week2.MainViewModel
@@ -38,7 +40,7 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
 
 @Composable
-fun SearchView(videoData: MainViewModel.VideoState, searchViewModel: SearchViewModel) {
+fun SearchView(videoData: MainViewModel.VideoState, searchViewModel: SearchViewModel, navHostController: NavHostController) {
 
     val query = remember { mutableStateOf("") }
 
@@ -67,7 +69,7 @@ fun SearchView(videoData: MainViewModel.VideoState, searchViewModel: SearchViewM
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             items(filteredVideos.size) { index ->
-                ThumbnailImage(videoId = filteredVideos[index].video_id)
+                ThumbnailImage(videoId = filteredVideos[index].video_id, navHostController)
             }
         }
     }
@@ -120,10 +122,10 @@ fun YoutubeIcon() {
 }
 
 @Composable
-fun ThumbnailImage(videoId: String) {
+fun ThumbnailImage(videoId: String, navHostController: NavHostController) {
     val thumbnailUrl = "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
     Box(
-        modifier = Modifier.fillMaxSize().aspectRatio(1f),
+        modifier = Modifier.fillMaxSize().aspectRatio(1f).clickable { navHostController.navigate(Screen.OtherScreens.Detail.oRoute + "/${videoId}") },
         contentAlignment = Alignment.Center
     ) {
         AsyncImage(

@@ -31,7 +31,7 @@ class MainViewModel : ViewModel(){
 
     private fun fetchCategories(limit: Int = 1000) {
         viewModelScope.launch { // suspend 함수가 실행될 수 있게 해줌
-            val politicalKeywords = listOf("정치", "대통령", "국회", "정부", "선거", "의회", "행정", "법안", "민주", "보수", "진보", "법원", "윤석열","탄핵", "관저", "뉴스", "국민의 힘","계엄", "체포","총리", "위원")
+            val politicalKeywords = listOf("경찰","정치", "대통령", "국회", "정부", "선거", "의회", "행정", "법안", "민주", "보수", "진보", "법원", "윤석열","탄핵", "관저", "뉴스", "국민의 힘","계엄", "체포","총리", "위원")
 
             try{
                 val response = apiService.getTrendingVideos(limit)

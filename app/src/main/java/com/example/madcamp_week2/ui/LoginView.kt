@@ -106,7 +106,7 @@ fun LoginView(navHostController: NavHostController){
                         containerColor = Color(0xFFD13739)
                     ),
                     onClick = {
-                        navHostController.navigate(Screen.OtherScreens.Main.oRoute)
+                        navHostController.navigate(Screen.OtherScreens.ASSALogin.oRoute)
                     }
                 ) {
                     Text("로그인")
