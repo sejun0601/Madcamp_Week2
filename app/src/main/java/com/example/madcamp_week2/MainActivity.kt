@@ -1,5 +1,6 @@
 package com.example.madcamp_week2
 
+import WaitingViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import com.example.madcamp_week2.ui.MainView
 import com.example.madcamp_week2.ui.Screen
 import com.example.madcamp_week2.ui.PlayView
 import com.example.madcamp_week2.ui.SignUpView
+import com.example.madcamp_week2.ui.WaitingView
 import com.example.madcamp_week2.ui.theme.Madcamp_Week2Theme
 
 class MainActivity : ComponentActivity() {
@@ -43,11 +45,20 @@ fun App(){
     val navController = rememberNavController()
     val assaLoginViewModel:ASSALoginViewModel = viewModel()
     val signUpViewModel: SignUpViewModel = viewModel()
+    val waitingViewModel: WaitingViewModel = viewModel()
+    val playViewModel: PlayViewModel = viewModel()
 
     NavHost(navController, startDestination = Screen.OtherScreens.Login.oRoute) {
         composable(Screen.OtherScreens.Login.oRoute) { LoginView(navController) }
         composable(Screen.OtherScreens.Main.oRoute) { MainView() }
-        composable(Screen.OtherScreens.Play.oRoute) { PlayView() }
+        composable(Screen.OtherScreens.Play.oRoute) { backStackEntry ->
+            val matchId = backStackEntry.arguments?.getString("matchId")?.toIntOrNull()
+            if (matchId != null) {
+                playViewModel.setMatchId(matchId)
+                PlayView(playViewModel = playViewModel)
+            }
+        }
+        composable(Screen.OtherScreens.Waiting.oRoute) { WaitingView(waitingViewModel, navController) }
         composable(Screen.OtherScreens.ASSALogin.oRoute) { ASSALoginView(assaLoginViewModel, navController) }
         composable(Screen.OtherScreens.Signup.oRoute) { SignUpView(signUpViewModel, navController) }
     }

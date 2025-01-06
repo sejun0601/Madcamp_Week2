@@ -59,7 +59,9 @@ interface ApiService {
     @POST("api/v1/auth/logout/")
     suspend fun logout(): LogoutResponse
 
-
+    // match queue
+    @POST("api/game/queue/")
+    suspend fun matchQueue(): MatchQueueResponse
 }
 
 suspend fun fetchCSRFToken(): String {
