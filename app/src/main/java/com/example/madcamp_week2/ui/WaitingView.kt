@@ -1,6 +1,7 @@
 package com.example.madcamp_week2.ui
 
 import WaitingViewModel
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -31,7 +32,11 @@ fun WaitingView(
     val waitingStatus by waitingViewModel.waitingStatus.collectAsState()
 
     LaunchedEffect(Unit) {
-        waitingViewModel.startMatching(navHostController)
+        try {
+            waitingViewModel.startMatching(navHostController)
+        } catch (e: Exception) {
+            Log.e("WaitingView", "startMatching 실행 중 오류 발생", e)
+        }
     }
 
     Column(

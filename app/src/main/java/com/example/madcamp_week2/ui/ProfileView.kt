@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -36,6 +37,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.madcamp_week2.R
@@ -44,6 +46,7 @@ import com.example.madcamp_week2.R
 fun ProfileView(navHostController: NavHostController) {
 
     Column {
+
         ProfileTab()
 
         HorizontalDivider(
@@ -71,49 +74,22 @@ fun ProfileTab(){
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        Image(
-            modifier = Modifier
-                .size(96.dp)
-                .clip(CircleShape)
-                .background(Color.Gray)
-                .padding(8.dp),
-            painter = painterResource(id = R.drawable.profile_icon),
-            contentDescription = null
-        )
-
         Column {
-
+            Spacer(modifier = Modifier.padding(12.dp))
             Text(
                 modifier = Modifier.padding(start = 8.dp),
                 text = "이병헌",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
             )
             Text(
                 modifier = Modifier.padding(start = 8.dp),
                 text = "leeBH@email.com",
             )
-
-            Row(
-                modifier = Modifier.padding(start = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Icon(
-                    painter = painterResource(R.drawable.wr_challenger),
-                    "",
-                    tint = Color.Unspecified
-                )
-
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = "챌린저 I")
-
-            }
-
         }
-        
+
         Spacer(Modifier.weight(1f))
-    
+
         Icon(
             imageVector = Icons.Filled.MoreVert,
             contentDescription = null
@@ -150,15 +126,16 @@ fun RankTab(navHostController: NavHostController){
 
                 Text(
                     modifier = Modifier.padding(8.dp),
-                    text = "챌린저 I",
-                    fontSize = 20.sp
+                    text = "  챌린저 I",
+                    fontSize = 16.sp
                 )
 
                 Spacer(Modifier.weight(1f))
 
                 Text(
                     text = "300 P",
-                    fontSize = 30.sp
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
 
@@ -168,18 +145,18 @@ fun RankTab(navHostController: NavHostController){
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, bottom = 8.dp, top = 8.dp, end = 16.dp),
+                    .padding(start = 16.dp, bottom = 8.dp, top = 8.dp, end = 16.dp)
+                    .height(40.dp),
                 shape = RoundedCornerShape(8.dp),
-                onClick = {}
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
             ) {
                 Text("대전 기록")
             }
 
         }
 
-
-
-
+        Spacer(modifier = Modifier.padding(2.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
@@ -187,7 +164,7 @@ fun RankTab(navHostController: NavHostController){
                 containerColor = Color(0xFFD13739)
             ),
             onClick = {
-                navHostController.navigate(Screen.OtherScreens.Waiting.oRoute)
+                // navHostController.navigate(Screen.OtherScreens.Waiting.oRoute)
             },
         ) {
 
@@ -198,7 +175,7 @@ fun RankTab(navHostController: NavHostController){
         }
     }
 
-    }
+}
 
 
 @Composable
@@ -208,8 +185,10 @@ fun FavoriteTab(){
         modifier = Modifier.padding(8.dp)
     ) {
         Text("즐겨찾기",
-            modifier = Modifier.padding(8.dp),
-            fontSize = 15.sp)
+            modifier = Modifier.padding(4.dp),
+            fontSize = 16.sp)
+
+        Spacer(modifier = Modifier.padding(8.dp))
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
@@ -239,4 +218,5 @@ fun FavoriteTab(){
     }
 
 }
+
 

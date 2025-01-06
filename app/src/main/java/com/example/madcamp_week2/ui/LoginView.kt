@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,10 +30,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
@@ -81,6 +87,11 @@ fun LoginView(navHostController: NavHostController){
 
         FullScreenShortsPlayer("TOdd_wdKfgM")
 
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.2f)) // 투명한 검은색 배경
+        )
 
         Column(
             modifier = Modifier.padding(bottom = 32.dp),
@@ -89,10 +100,10 @@ fun LoginView(navHostController: NavHostController){
 
             Spacer(Modifier.weight(1f))
 
-            Text("ASSA에 오신 것을", color = Color.White)
-            Text("환영합니다", color = Color.White)
-            Text("로그인하여 최신 트렌드를 확인하세요", color = Color.White)
-            Text("친구들과 트렌드 성적으로 경쟁해 보세요", color = Color.White)
+            Text(text = "ASSA에 오신 것을", color = Color.White)
+            Text(text = "환영합니다", color = Color.White)
+            Text(text = "로그인하여 최신 트렌드를 확인하세요", color = Color.White,)
+            Text(text = "친구들과 트렌드 성적으로 경쟁해 보세요", color = Color.White)
 
             Column(
                 modifier = Modifier.padding(32.dp),
@@ -321,8 +332,6 @@ fun FullScreenShortsPlayer(videoId: String) {
         }
     )
 }
-
-
 
 
 

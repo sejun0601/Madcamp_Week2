@@ -1,9 +1,6 @@
 package com.example.madcamp_week2.ui
 
-import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -16,21 +13,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.madcamp_week2.data.models.SignUpRequest
-import com.example.madcamp_week2.data.models.SignUpResponse
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
-import android.content.Context
-import android.content.SharedPreferences
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.madcamp_week2.SignUpViewModel
-import com.example.madcamp_week2.remote.apiService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 @Composable
 fun SignUpView(signUpViewModel: SignUpViewModel, navHostController: NavHostController) {
@@ -38,17 +26,23 @@ fun SignUpView(signUpViewModel: SignUpViewModel, navHostController: NavHostContr
     val context = LocalContext.current
 
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Center
     ) {
+        Text(text = "Sign Up", fontSize = 24.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(36.dp))
+
         TextField(
             value = signUpState.username,
             onValueChange = { signUpViewModel.setUsername(it) },
-            label = { Text("사용자 이름") },
+            label = { Text("User Name") },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+                .height(48.dp)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -56,9 +50,11 @@ fun SignUpView(signUpViewModel: SignUpViewModel, navHostController: NavHostContr
         TextField(
             value = signUpState.email,
             onValueChange = { signUpViewModel.setEmail(it)},
-            label = { Text("email") },
+            label = { Text("Email") },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+                .height(48.dp)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -66,11 +62,13 @@ fun SignUpView(signUpViewModel: SignUpViewModel, navHostController: NavHostContr
         TextField(
             value = signUpState.password,
             onValueChange = {signUpViewModel.setPassword(it) },
-            label = { Text("비밀번호") },
+            label = { Text("Password") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+                .height(48.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -88,9 +86,12 @@ fun SignUpView(signUpViewModel: SignUpViewModel, navHostController: NavHostContr
                     }
                 )
             },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFD13739)
+            ),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("회원가입")
+            Text("Sign Up")
         }
     }
 }
