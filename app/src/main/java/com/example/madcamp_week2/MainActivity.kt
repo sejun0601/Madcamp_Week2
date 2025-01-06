@@ -19,6 +19,7 @@ import com.example.madcamp_week2.ui.LoginView
 import com.example.madcamp_week2.ui.MainView
 import com.example.madcamp_week2.ui.Screen
 import com.example.madcamp_week2.ui.PlayView
+import com.example.madcamp_week2.ui.SignUpView
 import com.example.madcamp_week2.ui.theme.Madcamp_Week2Theme
 
 class MainActivity : ComponentActivity() {
@@ -43,5 +44,6 @@ fun App(){
         composable(Screen.OtherScreens.Login.oRoute) { LoginView(navController) }
         composable(Screen.OtherScreens.Main.oRoute) { MainView() }
         composable(Screen.OtherScreens.Play.oRoute) { PlayView() }
+        composable(Screen.OtherScreens.Signup.oRoute) { SignUpView() }
     }
 }

@@ -21,6 +21,8 @@ sealed class Screen(val title: String, val route: String) {
         object Detail: OtherScreens("Detail", "detail")
         object Main: OtherScreens("Main", "main")
         object Play: OtherScreens("Play", "play")
+        object Signup: OtherScreens("Signup", "signup")
+
     }
 
 
