@@ -1,5 +1,7 @@
 package com.example.madcamp_week2.remote
 
+import com.example.madcamp_week2.data.models.SignUpRequest
+import com.example.madcamp_week2.data.models.SignUpResponse
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -39,4 +41,8 @@ interface ApiService {
         @Body loginRequest: LoginRequest
     ): LoginResponse
 
+
+    // Sign Up
+    @POST("api/v1/auth/register/")
+    suspend fun signUp(@Body signUpRequest: SignUpRequest): SignUpResponse
 }

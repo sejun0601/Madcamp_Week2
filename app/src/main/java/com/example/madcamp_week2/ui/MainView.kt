@@ -127,7 +127,7 @@ fun Navigation(
         }
 
         composable(Screen.BottomScreen.Profile.bRoute) {
-            ProfileView(navController)
+            ProfileView()
         }
 
         composable(Screen.OtherScreens.Play.oRoute) {
