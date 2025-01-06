@@ -83,7 +83,9 @@ interface ApiService {
         @Header("X-CSRFToken") csrfToken: String,
         ) : ProfileResponse
 
-
+    // match queue
+    @POST("api/game/queue/")
+    suspend fun matchQueue(): MatchQueueResponse
 }
 
 suspend fun fetchCSRFToken(): String {

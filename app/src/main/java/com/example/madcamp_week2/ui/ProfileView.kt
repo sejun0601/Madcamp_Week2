@@ -233,7 +233,7 @@ fun RankTab(navHostController: NavHostController, userProfileState: UserProfileS
                 containerColor = Color(0xFFD13739)
             ),
             onClick = {
-                navHostController.navigate(Screen.OtherScreens.Play.oRoute)
+                navHostController.navigate(Screen.OtherScreens.Waiting.oRoute)
             },
         ) {
 

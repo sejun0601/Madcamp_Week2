@@ -33,8 +33,33 @@ data class LoginStatusResponse(
 )
 
 data class LogoutResponse(
-    val detail: String // 예: "로그아웃 성공"
+    val detail: String
 )
+
+data class MatchQueueResponse(
+    val detail: String,
+    val match: MatchResponse?
+)
+
+data class MatchResponse(
+    val id: Int, // 매칭 ID
+    val player1: PlayerResponse,
+    val player2: PlayerResponse,
+    val problem: ProblemResponse?,
+    val status: String
+)
+
+data class PlayerResponse(
+    val id: Int,
+    val username: String
+)
+
+data class ProblemResponse(
+    val id: Int,
+    val question: String,
+    val answer: String
+)
+
 
 data class ProfileResponse(
     val user : String,
