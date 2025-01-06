@@ -4,6 +4,9 @@ import com.example.madcamp_week2.data.models.SignUpRequest
 import com.example.madcamp_week2.data.models.SignUpResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.JavaNetCookieJar
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,9 +17,21 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
+import java.net.CookieManager
+
+val loggingInterceptor = HttpLoggingInterceptor().apply {
+    level = HttpLoggingInterceptor.Level.BODY // 요청과 응답의 전체 내용을 로깅
+}
+
+
+val client = OkHttpClient.Builder()
+    .addInterceptor(loggingInterceptor)
+    .cookieJar(JavaNetCookieJar(CookieManager()))
+    .build()
 
 val retrofit: Retrofit = Retrofit.Builder()
     .baseUrl("http://172.10.7.19:8000/")
+    .client(client)
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
@@ -53,11 +68,20 @@ interface ApiService {
 
     // 로그인 상태 확인
     @GET("api/v1/auth/status/")
-    suspend fun checkLoginStatus(): LoginStatusResponse
+    suspend fun checkLoginStatus(
+        @Header("X-CSRFToken") csrfToken: String,
+    ): LoginStatusResponse
 
     // 로그아웃 요청
     @POST("api/v1/auth/logout/")
-    suspend fun logout(): LogoutResponse
+    suspend fun logout(
+        @Header("X-CSRFToken") csrfToken: String,
+    ): LogoutResponse
+
+    @GET("api/v1/auth/profile/")
+    suspend fun getProfile(
+        @Header("X-CSRFToken") csrfToken: String,
+        ) : ProfileResponse
 
 
 }
@@ -69,19 +93,30 @@ suspend fun fetchCSRFToken(): String {
     }
 }
 
-suspend fun getLoggedInUser(): LoginStatusResponse? {
+
+
+suspend fun getLoggedInUser(csrfToken: String): LoginStatusResponse? {
     return try {
-        apiService.checkLoginStatus()
+        apiService.checkLoginStatus(csrfToken)
     } catch (e: Exception) {
         null // 로그인 상태 확인 실패 시 null 반환
     }
 }
 
-suspend fun logoutUser(): Boolean {
+suspend fun logoutUser(csrfToken: String): Boolean {
     return try {
-        val response = apiService.logout()
+        val response = apiService.logout(csrfToken )
         response.detail == "로그아웃 성공" // 서버 응답 메시지를 확인
     } catch (e: Exception) {
         false // 로그아웃 실패
+    }
+}
+
+suspend fun getProfile(csrfToken: String): ProfileResponse?{
+    return try {
+        val response = apiService.getProfile(csrfToken)
+        response
+    }catch (e:Exception){
+        null
     }
 }

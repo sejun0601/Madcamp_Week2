@@ -69,6 +69,8 @@ dependencies {
     implementation(libs.chromecast.sender)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
+    implementation(libs.logging.interceptor)
+    implementation(libs.okhttp.urlconnection)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

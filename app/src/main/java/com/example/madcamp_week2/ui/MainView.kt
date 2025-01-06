@@ -34,6 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.madcamp_week2.HomeViewModel
 import com.example.madcamp_week2.MainViewModel
+import com.example.madcamp_week2.ProfileViewModel
 import com.example.madcamp_week2.SearchViewModel
 
 
@@ -108,12 +109,13 @@ fun Navigation(
 
     val homeViewModel : HomeViewModel = viewModel()
     val searchViewModel: SearchViewModel = viewModel()
-
+    val profileViewModel: ProfileViewModel = viewModel()
 
     NavHost(
         navController = navController as NavHostController,
         startDestination = Screen.BottomScreen.Home.bRoute,
         modifier = Modifier.padding(innerPadding)) {
+
         composable(Screen.BottomScreen.Home.bRoute) {
             videoData?.let {
                 HomeView(videoData =videoData, homeViewModel)
@@ -127,7 +129,7 @@ fun Navigation(
         }
 
         composable(Screen.BottomScreen.Profile.bRoute) {
-            ProfileView(navController)
+            ProfileView(navController, profileViewModel)
         }
 
         composable(Screen.OtherScreens.Play.oRoute) {

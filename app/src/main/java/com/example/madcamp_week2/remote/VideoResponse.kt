@@ -36,3 +36,10 @@ data class LogoutResponse(
     val detail: String // 예: "로그아웃 성공"
 )
 
+data class ProfileResponse(
+    val user : String,
+    val email : String,
+    val rank_score: String,
+    val win_count : String,
+    val lose_count : String
+)
