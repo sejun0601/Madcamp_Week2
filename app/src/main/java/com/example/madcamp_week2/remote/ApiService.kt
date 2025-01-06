@@ -16,6 +16,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 import java.net.CookieManager
 
@@ -84,8 +85,20 @@ interface ApiService {
         ) : ProfileResponse
 
     // match queue
-    @POST("api/game/queue/")
-    suspend fun matchQueue(): MatchQueueResponse
+    @POST("api/v1/game/queue/")
+    suspend fun matchQueue(
+        @Header("X-CSRFToken") csrfToken: String,
+    ): MatchQueueResponse
+
+    @POST("/api/v1/game/matches/{match_id}/answer/")
+    suspend fun submitAnswer(
+        @Path("match_id") matchId: Int,
+        @Body submitAnswerRequest: SubmitAnswerRequest,
+        @Header("X-CSRFToken") csrfToken: String,
+    ): SubmitAnswerResponse
+
+
+
 }
 
 suspend fun fetchCSRFToken(): String {
@@ -95,7 +108,23 @@ suspend fun fetchCSRFToken(): String {
     }
 }
 
+suspend fun answer(matchId: Int, submitAnswerRequest: SubmitAnswerRequest, csrfToken: String): SubmitAnswerResponse?{
+    return try {
+        val response = apiService.submitAnswer(matchId,submitAnswerRequest, csrfToken)
+        response
+    }catch (e:Exception){
+        null
+    }
+}
 
+suspend fun enQueue(csrfToken: String) : MatchQueueResponse?{
+    return  try {
+        val response = apiService.matchQueue(csrfToken)
+        response
+    }catch (e: Exception){
+        null
+    }
+}
 
 suspend fun getLoggedInUser(csrfToken: String): LoginStatusResponse? {
     return try {

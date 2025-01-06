@@ -1,5 +1,7 @@
 package com.example.madcamp_week2.ui
 
+import WaitingViewModel
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
@@ -53,10 +55,10 @@ import com.example.madcamp_week2.R
 import com.example.madcamp_week2.UserProfileState
 
 @Composable
-fun ProfileView(navHostController: NavHostController, profileViewModel: ProfileViewModel) {
+fun ProfileView(navHostController: NavHostController, profileViewModel: ProfileViewModel, waitingViewModel: WaitingViewModel) {
 
     val userProfileState = profileViewModel.userProfileState.value
-
+    val context = LocalContext.current
     LaunchedEffect(userProfileState) {
         profileViewModel.performGetProfile(
             onResult = { result ->
@@ -70,13 +72,13 @@ fun ProfileView(navHostController: NavHostController, profileViewModel: ProfileV
 
 
     Column {
-        ProfileTab(userProfileState, profileViewModel, navHostController)
+        ProfileTab(context, userProfileState, profileViewModel, navHostController)
 
         HorizontalDivider(
             modifier = Modifier.padding(8.dp)
         )
 
-        RankTab(navHostController, userProfileState)
+        RankTab(context, navHostController, userProfileState, waitingViewModel)
 
         HorizontalDivider(
             modifier = Modifier.padding(8.dp)
@@ -89,9 +91,9 @@ fun ProfileView(navHostController: NavHostController, profileViewModel: ProfileV
 }
 
 @Composable
-fun ProfileTab(userProfileState: UserProfileState, profileViewModel: ProfileViewModel, navHostController: NavHostController){
+fun ProfileTab(context: Context,userProfileState: UserProfileState, profileViewModel: ProfileViewModel, navHostController: NavHostController){
 
-    val context = LocalContext.current
+
 
     Row(
         modifier = Modifier
@@ -171,7 +173,9 @@ fun ProfileTab(userProfileState: UserProfileState, profileViewModel: ProfileView
 }
 
 @Composable
-fun RankTab(navHostController: NavHostController, userProfileState: UserProfileState){
+fun RankTab(context: Context,navHostController: NavHostController, userProfileState: UserProfileState, waitingViewModel: WaitingViewModel){
+
+
     Column (
         modifier = Modifier.padding(8.dp)
     ) {
@@ -233,7 +237,16 @@ fun RankTab(navHostController: NavHostController, userProfileState: UserProfileS
                 containerColor = Color(0xFFD13739)
             ),
             onClick = {
+
                 navHostController.navigate(Screen.OtherScreens.Waiting.oRoute)
+                waitingViewModel.startMatching(navHostController,
+                    onResult = { detail ->
+                        Toast.makeText(context, detail, Toast.LENGTH_SHORT).show()
+                    },
+                    onError = { e->
+                        Toast.makeText(context, "${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                )
             },
         ) {
 

@@ -38,6 +38,7 @@ data class LogoutResponse(
 
 data class MatchQueueResponse(
     val detail: String,
+    val matched:Boolean,
     val match: MatchResponse?
 )
 
@@ -46,12 +47,16 @@ data class MatchResponse(
     val player1: PlayerResponse,
     val player2: PlayerResponse,
     val problem: ProblemResponse?,
+    val winner: String,
+    val started_at: String,
+    val ended_at : String,
     val status: String
 )
 
 data class PlayerResponse(
-    val id: Int,
-    val username: String
+    val id: Int ,
+    val username: String,
+    val email: String
 )
 
 data class ProblemResponse(
@@ -67,4 +72,13 @@ data class ProfileResponse(
     val rank_score: String,
     val win_count : String,
     val lose_count : String
+)
+
+data class SubmitAnswerRequest(
+    val answer:String
+)
+
+data class SubmitAnswerResponse(
+    val detail :String,
+    val winner : String,
 )

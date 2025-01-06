@@ -1,5 +1,6 @@
 package com.example.madcamp_week2.ui
 
+import WaitingViewModel
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -110,6 +111,8 @@ fun Navigation(
     val homeViewModel : HomeViewModel = viewModel()
     val searchViewModel: SearchViewModel = viewModel()
     val profileViewModel: ProfileViewModel = viewModel()
+    val waitingViewModel: WaitingViewModel = viewModel()
+
 
     NavHost(
         navController = navController as NavHostController,
@@ -129,11 +132,11 @@ fun Navigation(
         }
 
         composable(Screen.BottomScreen.Profile.bRoute) {
-            ProfileView(navController, profileViewModel)
+            ProfileView(navController, profileViewModel, waitingViewModel)
         }
 
         composable(Screen.OtherScreens.Play.oRoute) {
-            PlayView()
+            PlayView(waitingViewModel, navController)
         }
 
         composable(Screen.OtherScreens.Detail.oRoute + "/{videoId}" ,
@@ -142,6 +145,8 @@ fun Navigation(
             )) { backStackEntry ->
             DetailView(navController, backStackEntry)
         }
+
+        composable(Screen.OtherScreens.Waiting.oRoute) { WaitingView(waitingViewModel, navController) }
 
     }
 

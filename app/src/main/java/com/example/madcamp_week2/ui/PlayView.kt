@@ -1,6 +1,8 @@
 package com.example.madcamp_week2.ui
 
+import WaitingViewModel
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -28,13 +31,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.madcamp_week2.PlayViewModel
 import com.example.madcamp_week2.R
 
 
 @Composable
-fun PlayView(playViewModel: PlayViewModel = viewModel()) {
+fun PlayView(waitingViewModel: WaitingViewModel, navController: NavHostController) {
+    val context = LocalContext.current
     Log.d("NavigationTest", "PlayView Loaded")
+
+    val answer = waitingViewModel.answer.value
     // 전체 화면 배경 설정
     Box(
         modifier = Modifier
@@ -62,20 +69,41 @@ fun PlayView(playViewModel: PlayViewModel = viewModel()) {
 
             // 입력 필드
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = answer,
+                onValueChange = {waitingViewModel.setAnswer(it)},
                 placeholder = { Text("정답 입력") },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp)
             )
 
+            Button(onClick = {
+                waitingViewModel.performAnswer(
+                    onResult = { state ->
+                        if(state == "승리"){
+                            Log.d("PlayView", state)
+                            Toast.makeText(context, state, Toast.LENGTH_SHORT).show()
+                        }else if(state == "패배"){
+                            Log.d("PlayView", state)
+                            Toast.makeText(context, "패배", Toast.LENGTH_SHORT).show()
+                        }else if(state == "틀렸습니다"){
+                            Log.d("PlayView", state)
+                            Toast.makeText(context, state, Toast.LENGTH_SHORT).show()
+                        }else{
+                            Log.d("PlayView", state)
+                            Toast.makeText(context, state, Toast.LENGTH_SHORT).show()
+                        }
+
+                    },
+                    onError = {
+
+                    }
+                )
+            }) {
+                Text("정답 제출")
+            }
+
         }
     }
 }
 
-@Preview
-@Composable
-fun PlayPreView(){
-    PlayView()
-}
 

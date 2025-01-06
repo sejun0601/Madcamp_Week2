@@ -1,6 +1,7 @@
 package com.example.madcamp_week2.ui
 
 import WaitingViewModel
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,19 +21,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 
 @Composable
 fun WaitingView(
-    waitingViewModel: WaitingViewModel = viewModel(),
+    waitingViewModel: WaitingViewModel,
     navHostController: NavHostController
 ) {
-    val waitingStatus by waitingViewModel.waitingStatus.collectAsState()
+    val context = LocalContext.current
+    val matchState = waitingViewModel.matchState.value
 
-    LaunchedEffect(Unit) {
-        waitingViewModel.startMatching(navHostController)
-    }
+
 
     Column(
         modifier = Modifier
@@ -63,7 +64,7 @@ fun WaitingView(
 
         // Waiting Status Text
         Text(
-            text = waitingStatus,
+            text = if (matchState.waiting) { "매칭 중..."} else{ "매칭 완료"},
             fontSize = 16.sp,
             color = Color.Gray,
             textAlign = TextAlign.Center
