@@ -25,3 +25,14 @@ data class LoginRequest(
 data class LoginResponse(
     val detail: String
 )
+
+data class LoginStatusResponse(
+    val logged_in: Boolean,
+    val username: String?,
+    val email: String?
+)
+
+data class LogoutResponse(
+    val detail: String // 예: "로그아웃 성공"
+)
+

@@ -24,31 +24,17 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.navigation.NavHostController
+import com.example.madcamp_week2.SignUpViewModel
 import com.example.madcamp_week2.remote.apiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SignUpActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            SignUpView()
-        }
-    }
-}
-
-interface ApiService {
-    @POST("api/signup/")
-    fun signUp(@Body signUpRequest: SignUpRequest): Call<SignUpResponse>
-}
-
 @Composable
-fun SignUpView() {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
+fun SignUpView(signUpViewModel: SignUpViewModel, navHostController: NavHostController) {
+    val signUpState = signUpViewModel.signUpState.value
     val context = LocalContext.current
 
     Column(
@@ -58,8 +44,8 @@ fun SignUpView() {
         verticalArrangement = Arrangement.Center
     ) {
         TextField(
-            value = username,
-            onValueChange = { username = it },
+            value = signUpState.username,
+            onValueChange = { signUpViewModel.setUsername(it) },
             label = { Text("사용자 이름") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
@@ -68,8 +54,8 @@ fun SignUpView() {
         Spacer(modifier = Modifier.height(8.dp))
 
         TextField(
-            value = email,
-            onValueChange = { email = it },
+            value = signUpState.email,
+            onValueChange = { signUpViewModel.setEmail(it)},
             label = { Text("email") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
@@ -78,8 +64,8 @@ fun SignUpView() {
         Spacer(modifier = Modifier.height(8.dp))
 
         TextField(
-            value = password,
-            onValueChange = { password = it },
+            value = signUpState.password,
+            onValueChange = {signUpViewModel.setPassword(it) },
             label = { Text("비밀번호") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
@@ -91,30 +77,20 @@ fun SignUpView() {
 
         Button(
             onClick = {
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        val response = apiService.signUp(SignUpRequest(username, password, email))
-                        withContext(Dispatchers.Main) {
-                            // Handle success on the main thread
-                            Toast.makeText(context, "회원가입 성공", Toast.LENGTH_LONG).show()
-                        }
-                    } catch (e: Exception) {
-                        withContext(Dispatchers.Main) {
-                            // Handle error on the main thread
-                            Toast.makeText(context, "회원가입 실패: ${e.message}", Toast.LENGTH_LONG).show()
-                        }
+                signUpViewModel.performSignup(
+                    onResult = { detail ->
+                        Toast.makeText(context, detail, Toast.LENGTH_SHORT).show()
+                        navHostController.navigate(Screen.OtherScreens.Main.oRoute)
+                    },
+                    onError = { error ->
+                        Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_SHORT)
+                            .show()
                     }
-                }
+                )
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("회원가입")
         }
     }
-}
-
-@Preview(showBackground = true, name = "Default Preview")
-@Composable
-fun SignUpViewPreview() {
-    SignUpView()
 }

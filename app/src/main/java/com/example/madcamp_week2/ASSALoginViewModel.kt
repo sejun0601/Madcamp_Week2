@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.madcamp_week2.remote.LoginRequest
 import com.example.madcamp_week2.remote.apiService
+import com.example.madcamp_week2.remote.fetchCSRFToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,12 +30,6 @@ class ASSALoginViewModel : ViewModel(){
         )
     }
 
-    private suspend fun fetchCSRFToken(): String {
-        return withContext(Dispatchers.IO) {
-            val response = apiService.getCSRFToken()
-            response.csrfToken
-        }
-    }
     private suspend fun loginUser(csrfToken: String, username: String, password: String): String {
         return withContext(Dispatchers.IO) {
             val loginRequest = LoginRequest(username, password)

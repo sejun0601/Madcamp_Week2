@@ -42,12 +42,13 @@ class MainActivity : ComponentActivity() {
 fun App(){
     val navController = rememberNavController()
     val assaLoginViewModel:ASSALoginViewModel = viewModel()
+    val signUpViewModel: SignUpViewModel = viewModel()
 
     NavHost(navController, startDestination = Screen.OtherScreens.Login.oRoute) {
         composable(Screen.OtherScreens.Login.oRoute) { LoginView(navController) }
         composable(Screen.OtherScreens.Main.oRoute) { MainView() }
         composable(Screen.OtherScreens.Play.oRoute) { PlayView() }
         composable(Screen.OtherScreens.ASSALogin.oRoute) { ASSALoginView(assaLoginViewModel, navController) }
-        composable(Screen.OtherScreens.Signup.oRoute) { SignUpView() }
+        composable(Screen.OtherScreens.Signup.oRoute) { SignUpView(signUpViewModel, navController) }
     }
 }

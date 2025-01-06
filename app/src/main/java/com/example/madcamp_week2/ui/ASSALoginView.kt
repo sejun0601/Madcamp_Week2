@@ -82,7 +82,9 @@ fun ASSALoginView( assaLoginViewModel: ASSALoginViewModel, navHostController: Na
             }
 
             // Sign Up Button
-            Button(onClick = {}) {
+            Button(onClick = {
+                navHostController.navigate(Screen.OtherScreens.Signup.oRoute)
+            }) {
                 Text(text = "Sign Up")
             }
         }
