@@ -68,14 +68,22 @@ fun PlayView(playViewModel: PlayViewModel = viewModel()) {
         ) {
             Text(
                 text = "이정재",
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.End)
             )
-            Text(
-                text = "실버 II",
-                modifier = Modifier.align(Alignment.End)
+            Row(modifier = Modifier.align(Alignment.End), verticalAlignment = Alignment.CenterVertically){
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(R.drawable.wr_silver),
+                    contentDescription = "",
+                    tint = Color.Unspecified
                 )
+                Spacer(modifier = Modifier.padding(2.dp))
+                Text(
+                    text = "실버 II",
+                )
+            }
         }
 
         // 카드 형식의 컨텐츠
@@ -141,14 +149,22 @@ fun PlayView(playViewModel: PlayViewModel = viewModel()) {
         ) {
             Text(
                 text = "이병헌",
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.Start)
             )
-            Text(
-                text = "브론즈 II",
-                modifier = Modifier.align(Alignment.Start)
-            )
+            Row(modifier = Modifier.align(Alignment.Start), verticalAlignment = Alignment.CenterVertically){
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(R.drawable.wr_challenger),
+                    contentDescription = "",
+                    tint = Color.Unspecified
+                )
+                Spacer(modifier = Modifier.padding(2.dp))
+                Text(
+                    text = "챌린저 I",
+                )
+            }
         }
     }
 }
