@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +36,7 @@ import coil.request.ImageRequest
 import com.example.madcamp_week2.MainViewModel
 import com.example.madcamp_week2.R
 import com.example.madcamp_week2.SearchViewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
@@ -43,6 +45,20 @@ import java.io.ByteArrayInputStream
 fun SearchView(videoData: MainViewModel.VideoState, searchViewModel: SearchViewModel, navHostController: NavHostController) {
 
     val query = remember { mutableStateOf("") }
+
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = true  // 상태 표시줄 아이콘을 어둡게 사용할지 여부
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Color.White,    // 원하는 상태 표시줄 색상
+            darkIcons = useDarkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = Color.White,
+            darkIcons = useDarkIcons
+        )
+    }
 
     // Filter videos: exclude videos with political keywords and match query
     val filteredVideos = remember(query.value) {

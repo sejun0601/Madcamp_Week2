@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -12,6 +13,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -33,7 +35,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Madcamp_Week2Theme {
-                Surface(modifier = Modifier.fillMaxSize()) {
+                Surface(modifier = Modifier.fillMaxSize().background(Color.Black)) {
                     App()
                 }
             }
@@ -46,7 +48,6 @@ fun App(){
     val navController = rememberNavController()
     val assaLoginViewModel:ASSALoginViewModel = viewModel()
     val signUpViewModel: SignUpViewModel = viewModel()
-    val playViewModel: PlayViewModel = viewModel()
 
     NavHost(navController, startDestination = Screen.OtherScreens.Login.oRoute) {
         composable(Screen.OtherScreens.Login.oRoute) { LoginView(navController) }

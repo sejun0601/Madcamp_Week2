@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.accompanist.pager.indicators)
     implementation(libs.logging.interceptor)
     implementation(libs.okhttp.urlconnection)
+    implementation(libs.accompanist.systemuicontroller)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

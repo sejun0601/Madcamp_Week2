@@ -1,8 +1,11 @@
 package com.example.madcamp_week2.ui
 
 import WaitingViewModel
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Icon
@@ -59,17 +62,20 @@ fun MainView(){
 
     val bottomBar: @Composable () -> Unit = {
         NavigationBar(
-            Modifier.wrapContentSize(),
+            Modifier.wrapContentSize().height(110.dp),
             containerColor =if (currentRoute == Screen.BottomScreen.Home.bRoute) {
                 Color.Black
-            } else {
+            }else if ( currentRoute == Screen.BottomScreen.Profile.bRoute){
+                Color(0xFF141213)
+            }else if (currentRoute == Screen.BottomScreen.Search.bRoute){
                 Color.White
+            }else if (currentRoute == Screen.OtherScreens.MatchHistory.oRoute){
+                Color(0xFF141213)
+            }
+            else {
+                Color(0xFF141213)
             },
-            contentColor = if (currentRoute == Screen.BottomScreen.Home.bRoute) {
-                Color.White
-            } else {
-                Color.Black
-            },
+
             tonalElevation = 8.dp
         ){
             screensInBottomBar.forEach{
@@ -106,6 +112,7 @@ fun MainView(){
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigation(
     navController: NavController,
@@ -139,9 +146,12 @@ fun Navigation(
             ProfileView(navController, profileViewModel)
         }
 
-        composable(Screen.OtherScreens.MatchHistory.oRoute) {
+        composable(Screen.OtherScreens.MatchHistory.oRoute + "/{myUserName}",
+            arguments = listOf(
+                navArgument("myUserName"){type = NavType.StringType}
+            )) {
             val matchHistoryViewModel : MatchHistoryViewModel = viewModel()
-            MatchHistoryView(matchHistoryViewModel)
+            MatchHistoryView(matchHistoryViewModel, it)
         }
 
         composable(Screen.OtherScreens.Detail.oRoute + "/{videoId}" ,
@@ -156,7 +166,7 @@ fun Navigation(
             route = "match_flow"
         ) {
 
-            composable(Screen.OtherScreens.Waiting.oRoute) {
+            composable(Screen.OtherScreens.Waiting.oRoute,) {
                 val waitingViewModel = it.sharedViewModel<WaitingViewModel>(navController)
                 WaitingView(
                     waitingViewModel,

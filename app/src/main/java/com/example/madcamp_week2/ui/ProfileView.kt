@@ -43,9 +43,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -53,6 +56,7 @@ import com.example.madcamp_week2.MainActivity
 import com.example.madcamp_week2.ProfileViewModel
 import com.example.madcamp_week2.R
 import com.example.madcamp_week2.UserProfileState
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun ProfileView(navHostController: NavHostController, profileViewModel: ProfileViewModel) {
@@ -70,21 +74,37 @@ fun ProfileView(navHostController: NavHostController, profileViewModel: ProfileV
         )
     }
 
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = false  // 상태 표시줄 아이콘을 어둡게 사용할지 여부
 
-    Column {
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Color(0xff141213),    // 원하는 상태 표시줄 색상
+            darkIcons = useDarkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = Color(0xff141213),
+            darkIcons = useDarkIcons
+        )
+    }
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xff141213))
+    ) {
+
+        Text("정보",
+            fontSize = 40.sp,
+            modifier = Modifier.padding(24.dp),
+            color = Color.White,
+        )
+
         ProfileTab(context, userProfileState, profileViewModel, navHostController)
 
-        HorizontalDivider(
-            modifier = Modifier.padding(8.dp)
-        )
+        RankTab(context, navHostController, userProfileState, userProfileState.username)
 
-        RankTab(context, navHostController, userProfileState)
-
-        HorizontalDivider(
-            modifier = Modifier.padding(8.dp)
-        )
-
-        FavoriteTab()
 
     }
 
@@ -98,47 +118,31 @@ fun ProfileTab(context: Context,userProfileState: UserProfileState, profileViewM
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        Image(
-            modifier = Modifier
-                .size(96.dp)
-                .clip(CircleShape)
-                .background(Color.Gray)
-                .padding(8.dp),
-            painter = painterResource(id = R.drawable.profile_icon),
-            contentDescription = null
-        )
 
         Column {
 
             Text(
                 modifier = Modifier.padding(start = 8.dp),
-                text = userProfileState.username ,
+                text = userProfileState.username.substringBefore("@") ,
+                color = Color.White,
+                fontSize = 25.sp
             )
             Text(
                 modifier = Modifier.padding(start = 8.dp),
                 text = userProfileState.email,
+                color = Color(0xff474647),
+                fontSize = 15.sp
             )
 
-            Row(
+            Text(
+                "온라인",
+                color = Color(0xFF1DCA5F),
                 modifier = Modifier.padding(start = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Icon(
-                    painter = painterResource(R.drawable.wr_challenger),
-                    "",
-                    tint = Color.Unspecified
-                )
-
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = "챌린저 I")
-
-            }
+                fontSize = 15.sp
+            )
 
         }
         
@@ -164,7 +168,8 @@ fun ProfileTab(context: Context,userProfileState: UserProfileState, profileViewM
                 )
             },
             imageVector = Icons.Filled.Logout,
-            contentDescription = null
+            contentDescription = null,
+            tint = Color.White
         )
 
     }
@@ -173,8 +178,21 @@ fun ProfileTab(context: Context,userProfileState: UserProfileState, profileViewM
 }
 
 @Composable
-fun RankTab(context: Context,navHostController: NavHostController, userProfileState: UserProfileState){
+fun RankTab(context: Context,navHostController: NavHostController, userProfileState: UserProfileState, myUserName:String){
 
+    val rankScore = userProfileState.rankScore.toIntOrNull() ?:0
+
+    val (rankIconResource, rankName) = when (rankScore) {
+        in 0 until 100 -> R.drawable.wr_iron to "아이언"
+        in 100 until 200 -> R.drawable.wr_bronze to "브론즈"
+        in 200 until 300 -> R.drawable.wr_silver to "실버"
+        in 300 until 400 -> R.drawable.wr_gold to "골드"
+        in 400 until 500 -> R.drawable.wr_platinum to "플래티넘"
+        in 500 until 600 -> R.drawable.wr_diamond to "다이아몬드"
+        in 600 until 700 -> R.drawable.wr_master to "마스터"
+        in 700 until 800 -> R.drawable.wr_grand_master to "그랜드마스터"
+        else -> R.drawable.wr_challenger to "챌린저"
+    }
 
     Column (
         modifier = Modifier.padding(8.dp)
@@ -184,7 +202,7 @@ fun RankTab(context: Context,navHostController: NavHostController, userProfileSt
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(8.dp))
-                .background(Color(0xFFD9D9D9))
+                .background(Color(0xFF201E1F))
         ) {
             Row(
                 modifier = Modifier.padding(16.dp),
@@ -193,35 +211,39 @@ fun RankTab(context: Context,navHostController: NavHostController, userProfileSt
 
                 Icon(
                     modifier = Modifier.size(60.dp),
-                    painter = painterResource(R.drawable.wr_challenger),
+                    painter = painterResource(rankIconResource),
                     contentDescription = "",
                     tint = Color.Unspecified
                 )
 
                 Text(
                     modifier = Modifier.padding(8.dp),
-                    text = "챌린저 I",
-                    fontSize = 20.sp
+                    text = rankName,
+                    fontSize = 20.sp,
+                    color = Color.White
                 )
 
                 Spacer(Modifier.weight(1f))
 
                 Text(
-                    text = userProfileState.rankScore,
-                    fontSize = 30.sp
+                    text = "${userProfileState.rankScore} P",
+                    fontSize = 30.sp,
+                    color = Color.White
                 )
             }
 
-            HorizontalDivider(
-            )
+
 
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, bottom = 8.dp, top = 8.dp, end = 16.dp),
                 shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF333132)
+                ),
                 onClick = {
-                    navHostController.navigate(Screen.OtherScreens.MatchHistory.oRoute)
+                    navHostController.navigate(Screen.OtherScreens.MatchHistory.oRoute + "/${myUserName}")
                 }
             ) {
                 Text("대전 기록")
@@ -233,7 +255,7 @@ fun RankTab(context: Context,navHostController: NavHostController, userProfileSt
 
 
         Button(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFD13739)

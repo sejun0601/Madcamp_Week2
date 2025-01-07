@@ -24,6 +24,12 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.madcamp_week2.SignUpViewModel
 import com.example.madcamp_week2.remote.apiService
@@ -37,60 +43,78 @@ fun SignUpView(signUpViewModel: SignUpViewModel, navHostController: NavHostContr
     val signUpState = signUpViewModel.signUpState.value
     val context = LocalContext.current
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center
+    Box(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
     ) {
-        TextField(
-            value = signUpState.username,
-            onValueChange = { signUpViewModel.setUsername(it) },
-            label = { Text("사용자 이름") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TextField(
-            value = signUpState.email,
-            onValueChange = { signUpViewModel.setEmail(it)},
-            label = { Text("email") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TextField(
-            value = signUpState.password,
-            onValueChange = {signUpViewModel.setPassword(it) },
-            label = { Text("비밀번호") },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                signUpViewModel.performSignup(
-                    onResult = { detail ->
-                        Toast.makeText(context, detail, Toast.LENGTH_SHORT).show()
-                        navHostController.navigate(Screen.OtherScreens.Main.oRoute)
-                    },
-                    onError = { error ->
-                        Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                )
-            },
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 64.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("회원가입")
+            Text(text = "회원가입", fontSize = 24.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(36.dp))
+            OutlinedTextField(
+                value = signUpState.username,
+                onValueChange = { signUpViewModel.setUsername(it) },
+                label = { Text("사용자 이름") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(0.95f)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = signUpState.email,
+                onValueChange = { signUpViewModel.setEmail(it) },
+                label = { Text("email") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(0.95f)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = signUpState.password,
+                onValueChange = { signUpViewModel.setPassword(it) },
+                label = { Text("비밀번호") },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                modifier = Modifier.fillMaxWidth(0.95f)
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+                onClick = {
+                    signUpViewModel.performSignup(
+                        onResult = { detail ->
+                            Toast.makeText(context, detail, Toast.LENGTH_SHORT).show()
+                            navHostController.navigate(Screen.OtherScreens.Main.oRoute)
+                        },
+                        onError = { error ->
+                            Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    )
+                },
+                modifier = Modifier.size(80.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFD13739)
+                ),
+                shape = RoundedCornerShape(32.dp),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowForward,
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+
+            Spacer(Modifier.height(64.dp))
         }
     }
 }

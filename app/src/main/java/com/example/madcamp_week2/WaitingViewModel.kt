@@ -4,11 +4,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.example.madcamp_week2.UserProfileState
 import com.example.madcamp_week2.remote.enQueue
 import com.example.madcamp_week2.remote.MatchQueueResponse
 import com.example.madcamp_week2.remote.SubmitAnswerRequest
 import com.example.madcamp_week2.remote.answer
 import com.example.madcamp_week2.remote.fetchCSRFToken
+import com.example.madcamp_week2.remote.getProfile
 import com.example.madcamp_week2.ui.Screen
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
@@ -74,25 +76,32 @@ class WaitingViewModel : ViewModel() {
             }
         }
     }
-    /*
-    // 매칭 큐에서 사용자 제거
-    fun cancelMatching() {
-        _isCancelled.value = true
-        _waitingStatus.value = "매칭 취소 중..."
+
+    private val _userProfileState = mutableStateOf(UserProfileState())
+    val userProfileState : State<UserProfileState> = _userProfileState
+
+    fun performGetProfile(onResult: (String) -> Unit, onError: (Throwable) -> Unit) {
         viewModelScope.launch {
             try {
-                val response = performMatchQueueAction("remove")
-                if (response.status == "success") {
-                    _waitingStatus.value = "매칭 취소됨"
-                } else {
-                    _waitingStatus.value = "매칭 취소 실패"
+                val csrfToken = fetchCSRFToken()
+                val profile = getProfile(csrfToken)
+                profile?.let {
+                    _userProfileState.value = _userProfileState.value.copy(
+                        username = it.user,
+                        email = it.email,
+                        rankScore = it.rank_score,
+                        winCount = it.win_count,
+                        loseCount = it.lose_count
+                    )
                 }
+
+                onResult("Profile fetched")
+
             } catch (e: Exception) {
-                _waitingStatus.value = "매칭 취소 실패"
+                onError(e)
             }
         }
     }
-    */
 
 
 }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,17 +28,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import com.example.madcamp_week2.R
 import com.example.madcamp_week2.remote.apiService
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -52,6 +57,20 @@ import retrofit2.Response
 
 @Composable
 fun LoginView(navHostController: NavHostController){
+
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = false  // 상태 표시줄 아이콘을 어둡게 사용할지 여부
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Color.Transparent,    // 원하는 상태 표시줄 색상
+            darkIcons = useDarkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = Color.Transparent,
+            darkIcons = useDarkIcons
+        )
+    }
 
     val activity = LocalContext.current as ComponentActivity
 
@@ -83,16 +102,17 @@ fun LoginView(navHostController: NavHostController){
 
 
         Column(
-            modifier = Modifier.padding(bottom = 32.dp),
+            modifier = Modifier.padding(bottom = 48.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Spacer(Modifier.weight(1f))
 
-            Text("ASSA에 오신 것을", color = Color.White)
-            Text("환영합니다", color = Color.White)
-            Text("로그인하여 최신 트렌드를 확인하세요", color = Color.White)
-            Text("친구들과 트렌드 성적으로 경쟁해 보세요", color = Color.White)
+            Text("ASSA에 오신 것을", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            Text("환영합니다", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.height(8.dp))
+            Text("로그인하여 최신 트렌드를 확인하세요", color = Color(0xFFBEBEBE))
+            Text("친구들과 트렌드 성적으로 경쟁해 보세요", color = Color(0xFFBEBEBE))
 
             Column(
                 modifier = Modifier.padding(32.dp),
@@ -111,13 +131,6 @@ fun LoginView(navHostController: NavHostController){
                 ) {
                     Text("로그인")
                 }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
 
                     Button(
                         modifier = Modifier
@@ -205,7 +218,7 @@ fun LoginView(navHostController: NavHostController){
 //                        modifier = Modifier.size(24.dp)
 //                    )
 //                }
-                }
+
 
             }
         }

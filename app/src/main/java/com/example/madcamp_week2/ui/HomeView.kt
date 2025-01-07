@@ -2,7 +2,6 @@ package com.example.madcamp_week2.ui
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
-import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.madcamp_week2.HomeViewModel
 import com.example.madcamp_week2.MainViewModel
 import com.example.madcamp_week2.R
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -46,6 +47,20 @@ data class VideoData(
 
 @Composable
 fun HomeView(videoData: MainViewModel.VideoState, homeViewModel: HomeViewModel){
+
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = false  // 상태 표시줄 아이콘을 어둡게 사용할지 여부
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Color.Black,    // 원하는 상태 표시줄 색상
+            darkIcons = useDarkIcons
+        )
+        systemUiController.setNavigationBarColor(
+            color = Color.Black,
+            darkIcons = useDarkIcons
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -130,9 +145,6 @@ fun ShortsPlayer(videoId: String) {
     Box (
         contentAlignment = Alignment.CenterEnd
     ){
-
-
-
         // 뷰를 꽉 채우기 위해 fillMaxSize
         AndroidView(
             modifier = Modifier
@@ -162,8 +174,6 @@ fun ShortsPlayer(videoId: String) {
                 youTubePlayerView
             }
         )
-
-        OverlayButtons()
     }
 }
 
