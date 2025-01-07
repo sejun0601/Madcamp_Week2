@@ -53,6 +53,27 @@ data class MatchResponse(
     val status: String
 )
 
+data class Match(
+    val id: Int,
+    val player1: User,
+    val player2: User,
+    val problem: Problem,
+    val winner: User?,
+    val started_at: String,
+    val ended_at: String,
+    val status: String
+)
+data class User(
+    val id: Int,
+    val username: String,
+    val email: String
+)
+data class Problem(
+    val id: Int,
+    val question: String,
+    val answer: String
+)
+
 data class PlayerResponse(
     val id: Int ,
     val username: String,

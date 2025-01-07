@@ -32,7 +32,16 @@ fun WaitingView(
 ) {
     val context = LocalContext.current
     val matchState = waitingViewModel.matchState.value
-
+    LaunchedEffect(Unit) {
+        waitingViewModel.startMatching(navHostController,
+            onResult = { detail ->
+                Toast.makeText(context, detail, Toast.LENGTH_SHORT).show()
+            },
+            onError = { e->
+                Toast.makeText(context, "${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
 
 
     Column(

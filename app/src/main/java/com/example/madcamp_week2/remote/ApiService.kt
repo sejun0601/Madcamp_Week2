@@ -97,8 +97,23 @@ interface ApiService {
         @Header("X-CSRFToken") csrfToken: String,
     ): SubmitAnswerResponse
 
+    @GET("api/v1/game/my-matches/")
+    suspend fun getMyMatches(
+        @Header("X-CSRFToken") csrfToken: String,
+    ): List<Match>
 
 
+
+
+}
+
+suspend fun getMatchHistory(csrfToken: String) : List<Match>?{
+    return try{
+        val response = apiService.getMyMatches(csrfToken)
+        response
+    }catch (e:Exception){
+        null
+    }
 }
 
 suspend fun fetchCSRFToken(): String {

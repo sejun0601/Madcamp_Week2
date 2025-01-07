@@ -55,7 +55,7 @@ import com.example.madcamp_week2.R
 import com.example.madcamp_week2.UserProfileState
 
 @Composable
-fun ProfileView(navHostController: NavHostController, profileViewModel: ProfileViewModel, waitingViewModel: WaitingViewModel) {
+fun ProfileView(navHostController: NavHostController, profileViewModel: ProfileViewModel) {
 
     val userProfileState = profileViewModel.userProfileState.value
     val context = LocalContext.current
@@ -78,7 +78,7 @@ fun ProfileView(navHostController: NavHostController, profileViewModel: ProfileV
             modifier = Modifier.padding(8.dp)
         )
 
-        RankTab(context, navHostController, userProfileState, waitingViewModel)
+        RankTab(context, navHostController, userProfileState)
 
         HorizontalDivider(
             modifier = Modifier.padding(8.dp)
@@ -173,7 +173,7 @@ fun ProfileTab(context: Context,userProfileState: UserProfileState, profileViewM
 }
 
 @Composable
-fun RankTab(context: Context,navHostController: NavHostController, userProfileState: UserProfileState, waitingViewModel: WaitingViewModel){
+fun RankTab(context: Context,navHostController: NavHostController, userProfileState: UserProfileState){
 
 
     Column (
@@ -220,7 +220,9 @@ fun RankTab(context: Context,navHostController: NavHostController, userProfileSt
                     .fillMaxWidth()
                     .padding(start = 16.dp, bottom = 8.dp, top = 8.dp, end = 16.dp),
                 shape = RoundedCornerShape(8.dp),
-                onClick = {}
+                onClick = {
+                    navHostController.navigate(Screen.OtherScreens.MatchHistory.oRoute)
+                }
             ) {
                 Text("대전 기록")
             }
@@ -238,15 +240,8 @@ fun RankTab(context: Context,navHostController: NavHostController, userProfileSt
             ),
             onClick = {
 
-                navHostController.navigate(Screen.OtherScreens.Waiting.oRoute)
-                waitingViewModel.startMatching(navHostController,
-                    onResult = { detail ->
-                        Toast.makeText(context, detail, Toast.LENGTH_SHORT).show()
-                    },
-                    onError = { e->
-                        Toast.makeText(context, "${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-                )
+                navHostController.navigate("match_flow")
+
             },
         ) {
 

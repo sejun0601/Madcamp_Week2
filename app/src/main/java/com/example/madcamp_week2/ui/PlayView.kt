@@ -42,6 +42,7 @@ fun PlayView(waitingViewModel: WaitingViewModel, navController: NavHostControlle
     Log.d("NavigationTest", "PlayView Loaded")
 
     val answer = waitingViewModel.answer.value
+    val matchData = waitingViewModel.matchState
     // 전체 화면 배경 설정
     Box(
         modifier = Modifier
@@ -59,11 +60,13 @@ fun PlayView(waitingViewModel: WaitingViewModel, navController: NavHostControlle
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // 질문 텍스트
-            Text(
-                text = "이 뒤에 나올 대사는?",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Black
-            )
+            matchData.value.matchData?.match?.problem?.let {
+                Text(
+                    text = it.question,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Black
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -82,15 +85,33 @@ fun PlayView(waitingViewModel: WaitingViewModel, navController: NavHostControlle
                         if(state == "승리"){
                             Log.d("PlayView", state)
                             Toast.makeText(context, state, Toast.LENGTH_SHORT).show()
+                            navController.navigate(Screen.BottomScreen.Profile.bRoute) {
+                                popUpTo("match_flow") {
+                                    inclusive = true // "match_flow" 서브 그래프 전체 제거
+                                }
+                                launchSingleTop = true
+                            }
                         }else if(state == "패배"){
                             Log.d("PlayView", state)
                             Toast.makeText(context, "패배", Toast.LENGTH_SHORT).show()
+                            navController.navigate(Screen.BottomScreen.Profile.bRoute) {
+                                popUpTo("match_flow") {
+                                    inclusive = true // "match_flow" 서브 그래프 전체 제거
+                                }
+                                launchSingleTop = true
+                            }
                         }else if(state == "틀렸습니다"){
                             Log.d("PlayView", state)
                             Toast.makeText(context, state, Toast.LENGTH_SHORT).show()
                         }else{
                             Log.d("PlayView", state)
                             Toast.makeText(context, state, Toast.LENGTH_SHORT).show()
+                            navController.navigate(Screen.BottomScreen.Profile.bRoute) {
+                                popUpTo("match_flow") {
+                                    inclusive = true // "match_flow" 서브 그래프 전체 제거
+                                }
+                                launchSingleTop = true
+                            }
                         }
 
                     },

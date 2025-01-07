@@ -1,6 +1,7 @@
 package com.example.madcamp_week2.ui
 
 import WaitingViewModel
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -23,7 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -31,10 +34,12 @@ import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.madcamp_week2.HomeViewModel
 import com.example.madcamp_week2.MainViewModel
+import com.example.madcamp_week2.MatchHistoryViewModel
 import com.example.madcamp_week2.ProfileViewModel
 import com.example.madcamp_week2.SearchViewModel
 
@@ -111,7 +116,6 @@ fun Navigation(
     val homeViewModel : HomeViewModel = viewModel()
     val searchViewModel: SearchViewModel = viewModel()
     val profileViewModel: ProfileViewModel = viewModel()
-    val waitingViewModel: WaitingViewModel = viewModel()
 
 
     NavHost(
@@ -132,11 +136,12 @@ fun Navigation(
         }
 
         composable(Screen.BottomScreen.Profile.bRoute) {
-            ProfileView(navController, profileViewModel, waitingViewModel)
+            ProfileView(navController, profileViewModel)
         }
 
-        composable(Screen.OtherScreens.Play.oRoute) {
-            PlayView(waitingViewModel, navController)
+        composable(Screen.OtherScreens.MatchHistory.oRoute) {
+            val matchHistoryViewModel : MatchHistoryViewModel = viewModel()
+            MatchHistoryView(matchHistoryViewModel)
         }
 
         composable(Screen.OtherScreens.Detail.oRoute + "/{videoId}" ,
@@ -146,8 +151,35 @@ fun Navigation(
             DetailView(navController, backStackEntry)
         }
 
-        composable(Screen.OtherScreens.Waiting.oRoute) { WaitingView(waitingViewModel, navController) }
+        navigation(
+            startDestination = Screen.OtherScreens.Waiting.oRoute,
+            route = "match_flow"
+        ) {
+
+            composable(Screen.OtherScreens.Waiting.oRoute) {
+                val waitingViewModel = it.sharedViewModel<WaitingViewModel>(navController)
+                WaitingView(
+                    waitingViewModel,
+                    navController
+                )
+            }
+
+            composable(Screen.OtherScreens.Play.oRoute) {
+                val waitingViewModel = it.sharedViewModel<WaitingViewModel>(navController)
+                PlayView(waitingViewModel, navController)
+            }
+
+        }
 
     }
 
+}
+
+@Composable
+inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(navController: NavController): T {
+    val navGraphRoute = destination.parent?.route?: return viewModel()
+    val parentEntry = remember(this){
+        navController.getBackStackEntry(navGraphRoute)
+    }
+    return viewModel(parentEntry)
 }
