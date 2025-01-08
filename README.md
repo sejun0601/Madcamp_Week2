@@ -23,6 +23,10 @@
       <img src="https://github.com/user-attachments/assets/b4ce52ca-50ae-4bb6-acfd-96a9709858c0" alt="Login" width="300">
     </td>
     <td align="center">
+      <h3>Google Login</h3>
+      <img src="https://github.com/user-attachments/assets/e2515fe1-9bf8-4b59-a0bd-979eb5d0eff0" alt="Google Login" width="300">
+    </td>
+    <td align="center">
       <h3>Sign Up</h3>
       <img src="https://github.com/user-attachments/assets/58e345d8-25e2-4795-bf2e-fa0758515fc7" alt="Sign Up" width="300">
     </td>
