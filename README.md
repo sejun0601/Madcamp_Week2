@@ -2,10 +2,7 @@
 
 ## Outline
 
-<aside>
 ❤️‍🔥트렌드가 궁금할 때, **ASSA**와 함께하세요!
-
-</aside>
 
 - **ASSA는 당신이 트렌드에 뒤처지지 않도록 돕는 큐레이션 앱입니다.**
 - 매시간 업데이트되는 최신 이슈와 핫한 트렌드를 빠르고 간편하게 확인하세요. 
@@ -19,18 +16,19 @@
 
 - 구글 로그인과 일반 로그인을 지원합니다.
 
-### Login
+<table align="center">
+  <tr>
+    <td align="center">
+      <h3>Login</h3>
+      <img src="https://github.com/user-attachments/assets/b4ce52ca-50ae-4bb6-acfd-96a9709858c0" alt="Login" width="300">
+    </td>
+    <td align="center">
+      <h3>Sign Up</h3>
+      <img src="https://github.com/user-attachments/assets/58e345d8-25e2-4795-bf2e-fa0758515fc7" alt="Sign Up" width="300">
+    </td>
+  </tr>
+</table>
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/b4ce52ca-50ae-4bb6-acfd-96a9709858c0">
-</p>
-
-
-### Sign Up
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/b4ce52ca-50ae-4bb6-acfd-96a9709858c0">
-</p>
 
 ## 1️⃣Home
 
